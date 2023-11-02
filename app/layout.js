@@ -1,3 +1,4 @@
+import ClientProviders from "@/components/ClientProviders";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
@@ -12,7 +13,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        {children}
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );

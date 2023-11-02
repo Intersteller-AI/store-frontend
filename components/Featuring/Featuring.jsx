@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Item from './Item'
-import { categories, } from '@/data'
 import { HiTemplate } from 'react-icons/hi'
 import { GrPowerCycle } from 'react-icons/gr'
 import { BsBox2Fill } from 'react-icons/bs'
@@ -15,7 +14,7 @@ const Featuring = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const { data } = await axios.get("https://api.escuelajs.co/api/v1/products?offset=0&limit=5")
+        const { data } = await axios.get("https://api.escuelajs.co/api/v1/products?offset=0&limit=3")
 
         const uniarray = []
 
@@ -34,11 +33,9 @@ const Featuring = () => {
     getData()
   }, [])
 
-  console.log(data);
-
   return (
     <div className='w-full py-16 px-4 md:px-16 lg:px-32 min-h-screen'>
-      <div className='flex items-center md:flex-row flex-col gap-4 md:gap-0 justify-center md:justify-evenly py-6'>
+      <div className='flex md:items-center md:flex-row flex-col gap-4 md:gap-0 justify-center md:justify-evenly py-6'>
         <div className='flex items-center gap-4'>
           <HiTemplate className='text-[30px] text-blue-500' />
           <div className='flex flex-col'>
