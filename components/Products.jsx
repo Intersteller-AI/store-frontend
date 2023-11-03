@@ -7,9 +7,9 @@ import ProductCard from "./ProductCard";
 import FilterModal from "./FilterModal";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
-const getData = async (page = 0, perPage = 20) => {
+const getData = async (page = 0, perPage = 10) => {
   try {
-    const { data } = await axios.get(`https://api.escuelajs.co/api/v1/products?offset=${page > 0 ? page * 10 : page}&limit=${perPage}`)
+    const { data } = await axios.get(`https://api.escuelajs.co/api/v1/products?offset=${page > 0 ? page * perPage : page}&limit=${perPage}`)
 
     const { data: categories } = await axios.get(`https://api.escuelajs.co/api/v1/categories`)
 
@@ -34,10 +34,13 @@ const Products = () => {
   const [maxPrice, setMaxPrice] = useState(5000)
   const [modalOpen, setModalOpen] = useState(false)
   const [sortSelect, setSortSelect] = useState("")
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
 
   const { data, isLoading, refetch } = useQuery({
-    queryFn: () => getData(),
-    queryKey: ['products'],
+    queryFn: () => getData(page, rowsPerPage),
+    queryKey: ['products', page, rowsPerPage],
   })
 
   useEffect(() => {
@@ -51,7 +54,7 @@ const Products = () => {
   useEffect(() => {
     if (selectedCategory !== "all") {
       const filteredData = async () => {
-        const { data } = await axios.get(`https://api.escuelajs.co/api/v1/products?title=${seletedTitle}&price_min=${minPrice}&price_max=${maxPrice}&categoryId=${selectedCategory}&offset=0&limit=20`)
+        const { data } = await axios.get(`https://api.escuelajs.co/api/v1/products?title=${seletedTitle}&price_min=${minPrice}&price_max=${maxPrice}&categoryId=${selectedCategory}&offset=${page > 0 ? page * perPage : page}&limit=${rowsPerPage}`)
 
         setFilteredCategory(data)
       }
@@ -60,7 +63,37 @@ const Products = () => {
       refetch()
       setFilteredCategory(allProducts)
     }
+    setSortSelect("")
   }, [selectedCategory, minPrice, maxPrice])
+
+
+  useEffect(() => {
+    if (sortSelect === "New to Old") {
+      const sortedData = [...filteredCategory];
+      sortedData.sort((a, b) => {
+        const dateA = new Date(a.creationAt)
+        const dateB = new Date(b.creationAt)
+        return dateA - dateB;
+      });
+      setFilteredCategory(sortedData);
+    } else if (sortSelect === "Old to New") {
+      const sortedData = [...filteredCategory];
+      sortedData.sort((a, b) => {
+        const dateA = new Date(a.creationAt);
+        const dateB = new Date(b.creationAt);
+        return dateB - dateA;
+      });
+      setFilteredCategory(sortedData);
+    } else if (sortSelect === "Price Low to High") {
+      const sortedData = [...filteredCategory];
+      sortedData.sort((a, b) => a.price - b.price)
+      setFilteredCategory(sortedData);
+    } else if (sortSelect === "Price High to Low") {
+      const sortedData = [...filteredCategory];
+      sortedData.sort((a, b) => b.price - a.price)
+      setFilteredCategory(sortedData);
+    }
+  }, [sortSelect]);
 
   return (
     <>
@@ -95,7 +128,7 @@ const Products = () => {
           ))}
         </div>
       </div>
-      <Pagination />
+      <Pagination page={page} rowsPerPage={rowsPerPage} setPage={setPage} setRowsPerPage={setRowsPerPage} />
       <FilterModal
         maxPrice={maxPrice}
         minPrice={minPrice}

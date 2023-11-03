@@ -2,7 +2,7 @@ import Image from "next/image"
 
 const Item = ({ item, className, style }) => {
   return (
-    <div className={`relative max-w-sm h-[50vh] md:h-[70vh] border rounded-md overflow-hidden ${className} shadow-inner transition-all duration-300 hover:drop-shadow-xl drop-shadow-md bg-black`} style={style}>
+    <div className={`max-margin relative max-w-sm h-[50vh] md:h-[70vh] border rounded-md overflow-hidden ${className} shadow-inner transition-all duration-300 hover:drop-shadow-xl drop-shadow-md bg-black`} style={style}>
       <div className="h-full w-full overflow-hidden">
         <Image
           width={300}

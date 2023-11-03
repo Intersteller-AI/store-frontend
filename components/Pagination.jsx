@@ -16,9 +16,7 @@ const CenteredPagination = styled.div`
 `;
 
 
-const Pagination = () => {
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+const Pagination = ({page, rowsPerPage, setPage, setRowsPerPage}) => {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

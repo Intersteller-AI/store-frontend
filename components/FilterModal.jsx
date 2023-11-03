@@ -28,6 +28,7 @@ const FilterModal = ({ title, maxPrice, minPrice, sortSelect, setModalOpen, moda
     setSortSelect("")
     setMinPrice(0)
     setMaxPrice(5000)
+    setModalOpen(false)
   }
 
   const handleSave = () => {

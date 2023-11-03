@@ -7,3 +7,9 @@
   background-size: cover;
   background-position: center;
 }
+
+@media (max-width: 768px) {
+  .max-margin{
+    margin: 0% !important;
+  }
+}
